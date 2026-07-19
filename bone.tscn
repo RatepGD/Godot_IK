@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bwxnefbo502t8"]
+
+[ext_resource type="Texture2D" uid="uid://3bva0jraar5" path="res://icon.svg" id="1_jhw1f"]
+
+[node name="Bone" type="Sprite3D" unique_id=151198251 groups=["IK_bone"]]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.9999998, 0, 0, 0, 0.99999934, 0, 0, 0)
+texture = ExtResource("1_jhw1f")
+metadata/angle_range_deg = 180.0
+metadata/direction = Vector3(0, 0, 0)
