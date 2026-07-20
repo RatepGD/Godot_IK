@@ -7,7 +7,7 @@ extends Node3D
 func _ready() -> void:
 	var bones: Array[Node] = get_tree().get_nodes_in_group("IK_bone").filter(func(n:Node): return not n.is_in_group("IK_end"))
 	for bone in bones:
-		bone.set_meta("direction",bone.basis.z)
+		bone.set_meta("direction",bone.global_basis.z)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
@@ -15,7 +15,8 @@ func _physics_process(_delta: float) -> void:
 	print("========================")
 	print((get_child(0) as Node3D).get_meta("direction"))
 	print((get_child(0) as Node3D).basis.z)
-	print(((get_child(0) as Node3D).get_meta("direction") as Vector3).angle_to((get_child(0) as Node3D).basis.z))
+	var axis:Vector3 = ((get_child(0) as Node3D).get_meta("direction")as Vector3).cross((get_child(0) as Node3D).basis.z)
+	print(((get_child(0) as Node3D).get_meta("direction") as Vector3).signed_angle_to((get_child(0) as Node3D).basis.z,axis)*(180/PI))
 
 
 func chain_alg(node: Node3D):
@@ -35,14 +36,14 @@ func chain_alg(node: Node3D):
 	
 	var last_bone: bool = next.is_in_group("IK_end")
 	
-	#TODO: this is all fucked up
 	var pole_direction: Vector3 = node.get_meta("direction")
-	var current_angle: float = pole_direction.signed_angle_to(node.basis.z,normal)
+	var local_normal: Vector3 = pole_direction.cross(node.basis.z)
+	var angle_from_pole: float = pole_direction.signed_angle_to(node.global_basis.z,normal)
 	var angle_limit: float = (PI/180) * (node.get_meta("angle_range_deg")/2)
 	
 	#TODO: kind of works, but not really
-	if current_angle + angle_to_target > angle_limit:
-		pass#angle_to_target = 
+	if angle_from_pole + angle_to_target > angle_limit:
+		angle_to_target = angle_limit - angle_from_pole
 	
 	if last_bone:
 		if not is_equal_enough(normal,Vector3.ZERO,0.01):
