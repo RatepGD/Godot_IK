@@ -1,7 +1,7 @@
 extends Node3D
 
 @export var target: Node3D
-@export var softness: float = 0.1	# TODO: make this scale automatically in the script
+@export var softness: float = 0.1	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,11 +12,11 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
 	chain_alg(self)
-	print("========================")
-	print((get_child(0) as Node3D).get_meta("direction"))
-	print((get_child(0) as Node3D).basis.z)
-	var axis:Vector3 = ((get_child(0) as Node3D).get_meta("direction")as Vector3).cross((get_child(0) as Node3D).basis.z)
-	print(((get_child(0) as Node3D).get_meta("direction") as Vector3).signed_angle_to((get_child(0) as Node3D).basis.z,axis)*(180/PI))
+	#print("========================")
+	#print((get_child(0) as Node3D).get_meta("direction"))
+	#print((get_child(0) as Node3D).basis.z)
+	#var axis:Vector3 = ((get_child(0) as Node3D).get_meta("direction")as Vector3).cross((get_child(0) as Node3D).basis.z)
+	#print(((get_child(0) as Node3D).get_meta("direction") as Vector3).signed_angle_to((get_child(0) as Node3D).basis.z,axis)*(180/PI))
 
 
 func chain_alg(node: Node3D):
@@ -36,19 +36,6 @@ func chain_alg(node: Node3D):
 	
 	var last_bone: bool = next.is_in_group("IK_end")
 	
-	var pole_direction: Vector3 = node.get_meta("direction")
-	var local_normal: Vector3 = pole_direction.cross(node.basis.z)
-	var angle_from_pole: float = pole_direction.signed_angle_to(node.global_basis.z,normal)
-	var angle_limit: float = (PI/180) * (node.get_meta("angle_range_deg")/2)
-	
-	#TODO: kind of works, but not really
-	if angle_from_pole + angle_to_target > angle_limit:
-		angle_to_target = angle_limit - angle_from_pole
-	
-	if last_bone:
-		if not is_equal_enough(normal,Vector3.ZERO,0.01):
-			node.global_basis = node.global_basis.rotated(normal, angle_to_target)
-		return
 	
 	var next_to_target: Vector3 = target.global_position - next.global_position
 	
@@ -57,6 +44,22 @@ func chain_alg(node: Node3D):
 		var next_to_next2: Vector3 = next2.global_position - next.global_position
 		if next_to_next2.length() > next_to_target.length(): angle_to_target *= -1
 	
+	var pole_direction: Vector3 = node.get_meta("direction")
+	var local_normal: Vector3 = pole_direction.cross(node.basis.z)
+	var angle_from_pole: float = pole_direction.signed_angle_to(node.global_basis.z,normal)
+	var angle_limit: float = (PI/180) * (node.get_meta("angle_range_deg")/2)
+	
+	var predicted_angle: float = angle_from_pole + angle_to_target * softness
+	#TODO: detection works, but adjustment afterwards doesnt
+	if predicted_angle > angle_limit:
+		angle_to_target = angle_limit - angle_from_pole
+	elif predicted_angle < -angle_limit:
+		angle_to_target = -angle_limit - angle_from_pole
+	
+	if last_bone:
+		if not is_equal_enough(normal,Vector3.ZERO,0.01):
+			node.global_basis = node.global_basis.rotated(normal, angle_to_target * softness)
+		return
 	
 	if not is_equal_enough(normal,Vector3.ZERO,0.01):
 		node.global_basis = node.global_basis.rotated(normal, angle_to_target * softness)
