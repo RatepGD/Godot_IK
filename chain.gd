@@ -7,7 +7,7 @@ extends Node3D
 func _ready() -> void:
 	var bones: Array[Node] = get_tree().get_nodes_in_group("IK_bone").filter(func(n:Node): return not n.is_in_group("IK_end"))
 	for bone in bones:
-		bone.set_meta("direction",bone.basis.z)
+		bone.set_meta("direction",bone.global_basis.z)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
@@ -32,6 +32,12 @@ func chain_alg(node: Node3D):
 	var node_to_next: Vector3 = next.global_position - node.global_position
 	
 	var normal: Vector3 = node_to_next.cross(node_to_target).normalized()
+	
+	var reference_dir: Vector3 = node.get_meta("direction") # Change this based on your game's context
+
+	if normal.dot(reference_dir) < 0.0:
+		normal = -normal
+	
 	var angle_to_target = node_to_next.signed_angle_to(node_to_target,normal)
 	
 	var last_bone: bool = next.is_in_group("IK_end")
@@ -45,22 +51,22 @@ func chain_alg(node: Node3D):
 		if next_to_next2.length() > next_to_target.length(): angle_to_target *= -1
 	
 	var pole_direction: Vector3 = node.get_meta("direction")
-	var local_normal: Vector3 = pole_direction.cross(node.basis.z)
-	var angle_from_pole: float = pole_direction.signed_angle_to(node.basis.z,local_normal)
-	var angle_limit: float = (PI/180) * (node.get_meta("angle_range_deg")/2)
+	var local_normal: Vector3 = node.basis.x #pole_direction.cross(node.basis.z)
+	var angle_from_pole: float = pole_direction.signed_angle_to(node.global_basis.z,normal)
+	var angle_limit: float = deg_to_rad(node.get_meta("angle_range_deg")/2)
 	
 	var predicted_angle: float = angle_from_pole + angle_to_target
 	print(node.name+":")
-	print(rad_to_deg(angle_from_pole))
+	print(rad_to_deg(predicted_angle))
 	#TODO: detection works, but adjustment afterwards doesnt
 	if predicted_angle > angle_limit:
 		angle_to_target = angle_limit - angle_from_pole
 	elif predicted_angle < -angle_limit:
-		angle_to_target = -angle_limit + angle_from_pole
-	
+		angle_to_target = -angle_limit - angle_from_pole
+	print(rad_to_deg(angle_from_pole + angle_to_target))
 	if last_bone:
 		if not is_equal_enough(normal,Vector3.ZERO,0.01):
-			node.global_basis = node.global_basis.rotated(normal, angle_to_target)
+			node.global_basis = node.global_basis.rotated(normal, angle_to_target * 0.5 * softness)
 		return
 	
 	if not is_equal_enough(normal,Vector3.ZERO,0.01):

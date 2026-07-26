@@ -8,14 +8,14 @@
 [node name="Node" type="Node" unique_id=1460526321]
 
 [node name="Bone0" parent="." unique_id=151198251 node_paths=PackedStringArray("target") instance=ExtResource("1_h2yge")]
-transform = Transform3D(-0.9999995, 3.82137e-15, -8.742272e-08, 8.742273e-08, 4.3711378e-08, -0.9999993, 0, -0.99999976, -4.371135e-08, 0, 3.948825, 0)
+transform = Transform3D(0.9999995, 0, 0, 0, -4.3711378e-08, 0.9999993, 0, -0.99999976, -4.3711356e-08, 0, 1.2850869, 0)
 script = ExtResource("2_1bvp3")
 target = NodePath("../Target")
 softness = 0.05
 
 [node name="Bone1" parent="Bone0" unique_id=363593228 instance=ExtResource("1_h2yge")]
-transform = Transform3D(0.6351887, -3.376076e-08, 0.7723562, 3.3760756e-08, 0.99999976, 1.594637e-08, -0.77235657, 1.5946386e-08, 0.6351885, 0, -1.4210855e-14, 1.9868076)
-metadata/angle_range_deg = 100.0
+transform = Transform3D(0.99999964, 0, 0, 0, 0.99999976, 0, 0, 0, 0.9999993, 0, -1.4210855e-14, 1.9868076)
+metadata/angle_range_deg = 60.0
 
 [node name="Pointer" type="Sprite3D" parent="Bone0/Bone1" unique_id=1351189842 groups=["IK_bone", "IK_end"]]
 transform = Transform3D(0.3, 0, 0, 0, 0.30000013, -8.881784e-16, 0, 2.6645353e-15, 0.29999998, -1.1792238e-07, 6.5007946e-08, 1.918842)
@@ -23,11 +23,11 @@ modulate = Color(1, 0.98333335, 0, 1)
 texture = ExtResource("1_ig7tw")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=17031861]
-transform = Transform3D(1, 0, 0, 0, 0.84798336, 0.53002286, 0, -0.53002286, 0.84798336, 0.104287624, 3.8193903, 6.1379633)
+transform = Transform3D(1, 0, 0, 0, 0.84798336, 0.53002286, 0, -0.53002286, 0.84798336, 0.104287624, 6.7822943, 6.1379633)
 visible = false
 
 [node name="Target" type="Sprite3D" parent="." unique_id=861619532]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.301, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020149231, 7.0035434, 0)
 modulate = Color(1, 0, 0.016666412, 1)
 texture = ExtResource("1_ig7tw")
 script = ExtResource("3_h2yge")
