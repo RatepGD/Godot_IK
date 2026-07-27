@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3bva0jraar5" path="res://icon.svg" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dkj0s7rmakrgv" path="res://chain.gd" id="2_1bvp3"]
 [ext_resource type="Script" uid="uid://ckywy0hrp76mt" path="res://target_controller.gd" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://btl55trelb35j" path="res://cube.fbx" id="3_lquwl"]
 
 [node name="Node" type="Node" unique_id=1460526321]
 
@@ -13,9 +14,17 @@ script = ExtResource("2_1bvp3")
 target = NodePath("../Target")
 softness = 0.05
 
+[node name="cube" parent="Bone0" unique_id=1744931089 instance=ExtResource("3_lquwl")]
+transform = Transform3D(0.56, 0, 0, 0, -4.480417e-08, -0.56, 0, 1.025, -2.4478377e-08, 0, -4.145189e-08, 0.9483092)
+visible = false
+
 [node name="Bone1" parent="Bone0" unique_id=363593228 instance=ExtResource("1_h2yge")]
 transform = Transform3D(0.99999964, 0, 0, 0, 0.99999976, 0, 0, 0, 0.9999993, 0, -1.4210855e-14, 1.9868076)
 metadata/angle_range_deg = 60.0
+
+[node name="cube" parent="Bone0/Bone1" unique_id=856667158 instance=ExtResource("3_lquwl")]
+transform = Transform3D(0.55, 0, 0, 0, -0.55, 1.4036776e-07, 0, -8.3047695e-08, -0.9296136, 0, -4.2459092e-08, 0.9713516)
+visible = false
 
 [node name="Pointer" type="Sprite3D" parent="Bone0/Bone1" unique_id=1351189842 groups=["IK_bone", "IK_end"]]
 transform = Transform3D(0.3, 0, 0, 0, 0.30000013, -8.881784e-16, 0, 2.6645353e-15, 0.29999998, -1.1792238e-07, 6.5007946e-08, 1.918842)
