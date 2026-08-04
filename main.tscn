@@ -1,48 +1,125 @@
 [gd_scene format=3 uid="uid://cxrngob0wm6eq"]
 
-[ext_resource type="PackedScene" uid="uid://bwxnefbo502t8" path="res://bone.tscn" id="1_h2yge"]
-[ext_resource type="Texture2D" uid="uid://3bva0jraar5" path="res://icon.svg" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://dkj0s7rmakrgv" path="res://chain.gd" id="2_1bvp3"]
-[ext_resource type="Script" uid="uid://ckywy0hrp76mt" path="res://target_controller.gd" id="3_h2yge"]
-[ext_resource type="PackedScene" uid="uid://btl55trelb35j" path="res://cube.fbx" id="3_lquwl"]
+[ext_resource type="Material" uid="uid://dx8u07ayp066g" path="res://grass.tres" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://c364yhte4gn8l" path="res://player_controller.gd" id="2_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bwxnefbo502t8" path="res://bone.tscn" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://dkj0s7rmakrgv" path="res://chain.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://f0a6jv1uuwfh" path="res://leg_controller.gd" id="3_lquwl"]
 
-[node name="Node" type="Node" unique_id=1460526321]
+[sub_resource type="BoxShape3D" id="BoxShape3D_7dm0k"]
+size = Vector3(21, 1.1210938, 21)
 
-[node name="Bone0" parent="." unique_id=151198251 node_paths=PackedStringArray("target") instance=ExtResource("1_h2yge")]
-transform = Transform3D(0.9999995, 0, 0, 0, -4.3711378e-08, 0.9999993, 0, -0.99999976, -4.3711356e-08, 0, 1.2850869, 0)
+[sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
+size = Vector3(1.1949615, 1.3441162, 0.68011475)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_lquwl"]
+
+[node name="Node3D" type="Node3D" unique_id=516146681]
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=2001191453]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1001741471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.060546875, 0)
+shape = SubResource("BoxShape3D_7dm0k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=2040142068]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("BoxMesh_ig7tw")
+surface_material_override/0 = ExtResource("1_ig7tw")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=982422672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.024260521, 3.086531, -0.034496248)
+motion_mode = 1
 script = ExtResource("2_1bvp3")
-target = NodePath("../Target")
-softness = 0.05
 
-[node name="cube" parent="Bone0" unique_id=1744931089 instance=ExtResource("3_lquwl")]
-transform = Transform3D(0.56, 0, 0, 0, -4.480417e-08, -0.56, 0, 1.025, -2.4478377e-08, 0, -4.145189e-08, 0.9483092)
-visible = false
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=467128503]
+transform = Transform3D(-4.371139e-08, 0.2896165, -0.95714283, -2.6054016e-15, 0.95714283, 0.2896165, 1, 1.265954e-08, -4.1838042e-08, -4.133176, 0.74159026, 0.05784315)
 
-[node name="Bone1" parent="Bone0" unique_id=363593228 instance=ExtResource("1_h2yge")]
-transform = Transform3D(0.99999964, 0, 0, 0, 0.99999976, 0, 0, 0, 0.9999993, 0, -1.4210855e-14, 1.9868076)
-metadata/angle_range_deg = 60.0
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1051458415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00504303, -0.42193604, 0.0016174316)
+shape = SubResource("BoxShape3D_ig7tw")
 
-[node name="cube" parent="Bone0/Bone1" unique_id=856667158 instance=ExtResource("3_lquwl")]
-transform = Transform3D(0.55, 0, 0, 0, -0.55, 1.4036776e-07, 0, -8.3047695e-08, -0.9296136, 0, -4.2459092e-08, 0.9713516)
-visible = false
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=864958723]
+transform = Transform3D(1.145295, 0, 0, 0, 1.3319659, 0, 0, 0, 0.6569474, 0, -0.4269979, 0)
+mesh = SubResource("BoxMesh_0xm2m")
 
-[node name="Pointer" type="Sprite3D" parent="Bone0/Bone1" unique_id=1351189842 groups=["IK_bone", "IK_end"]]
-transform = Transform3D(0.3, 0, 0, 0, 0.30000013, -8.881784e-16, 0, 2.6645353e-15, 0.29999998, -1.1792238e-07, 6.5007946e-08, 1.918842)
-modulate = Color(1, 0.98333335, 0, 1)
-texture = ExtResource("1_ig7tw")
+[node name="LegLController" type="Node3D" parent="CharacterBody3D" unique_id=1927054343 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 2.9802322e-08, 0, 0, 1.0000001, 0.3903819, -1.0858142, -0.024494838)
+script = ExtResource("3_lquwl")
+target = NodePath("../../LegLTarget")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=17031861]
-transform = Transform3D(1, 0, 0, 0, 0.84798336, 0.53002286, 0, -0.53002286, 0.84798336, 0.104287624, 6.7822943, 6.1379633)
-visible = false
+[node name="LegL" parent="CharacterBody3D/LegLController" unique_id=1034197921 node_paths=PackedStringArray("target") instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.80894494, -0.58788365, 0, 0.5878839, 0.8089445, 0, 0, 0)
+script = ExtResource("3_1bvp3")
+target = NodePath("../../../LegLTarget")
 
-[node name="Target" type="Sprite3D" parent="." unique_id=861619532]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020149231, 7.0035434, 0)
-modulate = Color(1, 0, 0.016666412, 1)
-texture = ExtResource("1_ig7tw")
-script = ExtResource("3_h2yge")
-speed = 5.0
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/LegLController/LegL" unique_id=2092576192]
+transform = Transform3D(0.2455588, 0, 0, 0, 0.18364695, 0, 0, 0, 0.7690515, 0, -0.0021139425, 0.38631776)
+mesh = SubResource("BoxMesh_lquwl")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1071182062]
-transform = Transform3D(11.695, 0, 0, 0, -5.112047e-07, 11.695, 0, -11.695, -5.112047e-07, 0, -1.6672797, 0)
-modulate = Color(0, 1, 0, 1)
-texture = ExtResource("1_ig7tw")
+[node name="KneeL" parent="CharacterBody3D/LegLController/LegL" unique_id=1452479897 instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.20444474, -0.9788774, 0, 0.9788779, 0.20444463, 0, 2.2351738e-08, 0.7897985)
+metadata/angle_range_deg = 120.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/LegLController/LegL/KneeL" unique_id=2040349965]
+transform = Transform3D(0.2399649, 0, 0, 0, 0.1950872, -4.4453554e-08, 0, 1.0774358e-08, 0.80490357, 0, -0.0025023066, 0.38977757)
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="Bone" parent="CharacterBody3D/LegLController/LegL/KneeL" unique_id=1089972483 groups=["IK_end"] instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.9999999, 0, 0, -2.9802322e-08, 0.9999994, 0, -2.9802319e-08, 0.7882168)
+
+[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/LegLController" unique_id=1047785094]
+target_position = Vector3(0, -2, 0)
+hit_back_faces = false
+
+[node name="LegRController" type="Node3D" parent="CharacterBody3D" unique_id=363633984 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 2.9802322e-08, 0, 0, 1.0000001, -0.40964198, -1.0759423, -0.07207069)
+script = ExtResource("3_lquwl")
+target = NodePath("../../LegRTarget")
+
+[node name="LegR" parent="CharacterBody3D/LegRController" unique_id=2003247134 node_paths=PackedStringArray("target") instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.80894494, -0.58788365, 0, 0.5878839, 0.8089445, 0, 0, 0)
+script = ExtResource("3_1bvp3")
+target = NodePath("../../../LegRTarget")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/LegRController/LegR" unique_id=1872839167]
+transform = Transform3D(0.2455588, 0, 0, 0, 0.18364695, 0, 0, 0, 0.7690515, 0, -0.0021139425, 0.38631776)
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="KneeR" parent="CharacterBody3D/LegRController/LegR" unique_id=1693687345 instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.20444474, -0.9788774, 0, 0.9788779, 0.20444463, 0, 2.2351738e-08, 0.7897985)
+metadata/angle_range_deg = 120.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/LegRController/LegR/KneeR" unique_id=1578236721]
+transform = Transform3D(0.2399649, 0, 0, 0, 0.1950872, -4.4453554e-08, 0, 1.0774358e-08, 0.80490357, 0, -0.0025023066, 0.38977757)
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="Bone" parent="CharacterBody3D/LegRController/LegR/KneeR" unique_id=109021341 groups=["IK_end"] instance=ExtResource("2_h2yge")]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.9999999, 0, 0, -2.9802322e-08, 0.9999994, 0, 0, 0.79431945)
+
+[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/LegRController" unique_id=485542512]
+target_position = Vector3(0, -2, 0)
+hit_back_faces = false
+
+[node name="LegRTarget" type="Node3D" parent="." unique_id=1138777050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54384476, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LegRTarget" unique_id=823406489]
+transform = Transform3D(0.575, 0, 0, 0, 0.575, 0, 0, 0, 0.575, 0, 0, 0)
+mesh = SubResource("SphereMesh_lquwl")
+
+[node name="LegLTarget" type="Node3D" parent="." unique_id=561929495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5037911, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LegLTarget" unique_id=1447046660]
+transform = Transform3D(0.575, 0, 0, 0, 0.575, 0, 0, 0, 0.575, 0, 0, 0)
+mesh = SubResource("SphereMesh_lquwl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1422852480]
+transform = Transform3D(1, 0, 0, 0, 0.6154277, 0.7881934, 0, -0.7881934, 0.6154277, -0.54384476, 8.116822, 5.0237956)

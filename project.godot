@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 
 IK_end="last part of an IK chain showing where the bone ends"
 IK_bone="part of an IK chain"
-IK_pole=""
 
 [input]
 
